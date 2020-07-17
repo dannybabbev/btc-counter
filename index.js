@@ -5,7 +5,7 @@ const init = async () => {
 
     const server = Hapi.server({
         port: 3000,
-        host: 'localhost'
+        host: '0.0.0.0'
     });
 
     server.route({
@@ -13,11 +13,9 @@ const init = async () => {
         path: '/',
         handler: async (r, h) => {
             const response = await axios.get("https://api.coindesk.com/v1/bpi/currentprice.json");
-            const data = response.data;
-            console.log(data);
 
             return  {
-                number: Math.ceil(data.bpi.USD.rate_float)
+                number: Math.ceil(response.data.bpi.USD.rate_float)
             };
         }
     });
@@ -27,7 +25,6 @@ const init = async () => {
 };
 
 process.on('unhandledRejection', (err) => {
-
     console.log(err);
     process.exit(1);
 });
